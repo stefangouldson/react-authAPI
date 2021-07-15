@@ -29,7 +29,7 @@ const Register = (props) => {
 
     return (
         <div className="w-full bg-gray-50 min-h-screen">
-            <h1 className="text-center text-4xl mb-10 pt-5">Login</h1>
+            <h1 className="text-center text-4xl mb-10 pt-5">Register</h1>
             <form onSubmit={handleSubmit} className="mx-auto px-10">
                 <div className="mb-4">
                     <input
