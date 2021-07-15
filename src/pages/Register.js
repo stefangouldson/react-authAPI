@@ -1,17 +1,26 @@
 import React from 'react';
 import apiClient from '../services/apiClient';
+import { authActions } from '../store/auth';
+import { useDispatch } from 'react-redux';
 
 const Register = (props) => {
+    const dispatch = useDispatch();
+
     const [name, setName] = React.useState('');
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
 
     const [error, setError] = React.useState(false);
 
+
     const resetForm = () =>{
         setName('');
         setEmail('');
         setPassword('');
+    }
+
+    const setToken = (data) => {
+        dispatch(authActions.setToken(data))
     }
 
     const handleSubmit = (e) => {
@@ -26,6 +35,7 @@ const Register = (props) => {
                 console.log(response);
                 resetForm();
                 setError(false);
+                setToken({token: response.data.token});
             }).catch(err => {
                 console.error(err);
                 setError(true)
