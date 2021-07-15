@@ -1,20 +1,23 @@
 import React from 'react';
 import apiClient from '../services/apiClient';
 
-const Login = (props) => {
+const Register = (props) => {
+    const [name, setName] = React.useState('');
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
 
     const resetForm = () =>{
+        setName('');
         setEmail('');
-        setPassword('')
+        setPassword('');
     }
 
     const handleSubmit = (e) => {
         e.preventDefault();
         apiClient.get('sanctum/csrf-cookie')
         .then(response =>{
-            apiClient.post('api/login', {
+            apiClient.post('api/register', {
+                name: name,
                 email: email,
                 password: password
             }).then(response => {
@@ -28,6 +31,16 @@ const Login = (props) => {
         <div className="w-full bg-gray-50 min-h-screen">
             <h1 className="text-center text-4xl mb-10 pt-5">Login</h1>
             <form onSubmit={handleSubmit} className="mx-auto px-10">
+                <div className="mb-4">
+                    <input
+                        type="text"
+                        name="name"
+                        placeholder="Name"
+                        value={name}
+                        onChange={e => setName(e.target.value)}
+                        required className="w-full text-lg py-1 px-2 border-gray-300 focus:border-indigo-300 focus:ring-indigo-200 focus:ring focus:ring-opacity-50 rounded-md shadow-sm"
+                    />
+                </div>
                 <div className="mb-4">
                     <input
                         type="email"
@@ -54,4 +67,4 @@ const Login = (props) => {
     );    
 }
 
-export default Login;
+export default Register;
