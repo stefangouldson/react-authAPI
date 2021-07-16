@@ -1,10 +1,13 @@
 import React from 'react';
 import apiClient from '../services/apiClient';
 import { authActions } from '../store/auth';
+
 import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router';
 
 const Register = (props) => {
     const dispatch = useDispatch();
+    const history = useHistory();
 
     const [name, setName] = React.useState('');
     const [email, setEmail] = React.useState('');
@@ -36,6 +39,7 @@ const Register = (props) => {
                 resetForm();
                 setError(false);
                 setToken({token: response.data.token});
+                history.push('/about');
             }).catch(err => {
                 console.error(err);
                 setError(true)

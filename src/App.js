@@ -1,12 +1,14 @@
 import './App.css';
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route, NavLink } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, NavLink, Redirect} from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { authActions } from './store/auth';
 import { useEffect } from 'react';
 
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Home from './pages/Home';
+import About from './pages/About';
 
 function App() {
     const isAuth = useSelector(state => state.auth.token)
@@ -23,28 +25,53 @@ function App() {
     })
 
     const logoutHandler = () => {
-        dispatch(authActions.logout())
+        dispatch(authActions.logout());
       }
 
   return (
     <Router>
+        <div className="w-full flex bg-blue-400 px-10">
+            <NavLink exact activeClassName="underline" className="p-2 text-white font-semibold" to='/'>Home</NavLink>
+
         {!isAuth && (
-            <div className="w-full flex bg-blue-400 px-10">
-                <NavLink activeClassName="underline" className="p-2 text-white font-semibold" to='/login'>Login</NavLink>
-                <NavLink activeClassName="underline" className="p-2 text-white font-semibold" to='/register'>Register</NavLink>
-            </div>
+                <React.Fragment>
+                    <NavLink activeClassName="underline" className="p-2 text-white font-semibold" to='/login'>Login</NavLink>
+                    <NavLink activeClassName="underline" className="p-2 text-white font-semibold" to='/register'>Register</NavLink>
+                </React.Fragment>
         )}
         {!!isAuth && (
-            <div className="w-full flex bg-blue-400 px-10">
-                <button onClick={logoutHandler} className="p-2 text-white font-semibold">Logout</button>
-            </div>
+            <React.Fragment>
+                <NavLink activeClassName="underline" className="p-2 text-white font-semibold" to='/about'>About</NavLink>
+                <button onClick={logoutHandler} className="p-2 text-white font-semibold ml-auto">Logout</button>
+            </React.Fragment>
+
         )}
+        </div>
+        
         <Switch>
-            <Route path='/login' component={Login} />
-            <Route path='/register' component={Register} />
+        <Route path='/' component={Home} exact />
+
+        <Route path='/login'>
+            {!isAuth && <Login /> }
+            {!!isAuth && <Redirect to='/' />}
+        </Route>
+        <Route path='/register'>
+            {!isAuth &&<Register /> }
+            {!!isAuth && <Redirect to='/' />}
+        </Route>
+        
+        <Route path='/about' exact>
+            {!!isAuth && <About />}
+            {!isAuth && <Redirect to='/login' />}
+        </Route>
+        
         </Switch>
+
+        <Route path="*">
+            <Redirect to='/' />
+        </Route>
     </Router>
-);
+    );
 }
 
 export default App;

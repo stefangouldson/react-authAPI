@@ -1,15 +1,17 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router';
+
 import { authActions } from '../store/auth';
 import apiClient from '../services/apiClient';
 
 const Login = (props) => {
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
+    const history = useHistory();
 
     const email = useSelector(state => state.auth.email);
     const password = useSelector(state => state.auth.password);
     const error = useSelector(state => state.auth.error);
-    const token = useSelector(state => state.auth.token);
     
     const setEmail = (e) => {
         dispatch(authActions.setEmail(e.target.value));
@@ -37,8 +39,8 @@ const Login = (props) => {
             }).then(res => {
                 // console.log(res.data.token);
                 setToken({token: res.data.token});
-                console.log(token);
                 dispatch(authActions.resetForm())
+                history.push('/about');
             }).catch(err => {
                 console.error(err);
                 setError(true);
